@@ -26,13 +26,14 @@ import android.os.Bundle;
 import android.widget.EditText;
 
 /**
- * Finestra di dialogo per l'inserimento di un testo (campo di input)
+ * Dialog window to insert an input text.
  *
- * Il risultato dell'inserimento viene restituito all'interno del bundle di risposta
- * sotto la voce 'DIALOG_RESULT_VALUE'
+ * As result, the text inserted by user will be returned inside a bundle
+ * under the key 'DIALOG_RESULT_VALUE'
  * 
- * Eventuali parametri aggiuntivi in input
- * PARAM_HINT : Tooltip all'interno della casella di testo
+ * Optional input paramters:
+ * PARAM_HINT : Tooltip to be used inside a textfield
+ * PARAM_INPUT_TYPE : Input type to be associated with the keyboard (see android.text.InputType)
  * 
 s */
 public class MessagePromptDialogFragment extends DialogFragment 
@@ -43,7 +44,8 @@ implements DialogInterface.OnClickListener {
 	
 	public final static String DIALOG_RESULT_VALUE = "dialogResult";
 	
-	public final static String PARAM_hint = "_hint";
+	public final static String PARAM_HINT = "_hint";
+	public final static String PARAM_INPUT_TYPE = "_inputType";
 		
 	public static MessagePromptDialogFragment newInstance(String title, 
 			String message, Bundle extraParams, 
@@ -76,8 +78,15 @@ implements DialogInterface.OnClickListener {
 		b.setMessage(this.getArguments().getString("message"));
 		
 		editText = new EditText(getActivity());
-		String hits = getArguments().getString(PARAM_hint);
+		
+		// Set the optional param HINT
+		String hits = getArguments().getString(PARAM_HINT);
 		if (hits != null) editText.setHint(hits);
+		
+		// Set the optional param INPUT_TYPE
+		int inputType = getArguments().getInt(PARAM_INPUT_TYPE, -1);
+		if (inputType > 0) editText.setInputType(inputType);
+		
 		b.setView(editText);
 		
 		return b.create();
