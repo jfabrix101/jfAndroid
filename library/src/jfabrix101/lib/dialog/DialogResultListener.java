@@ -23,11 +23,13 @@ import android.os.Bundle;
 public interface DialogResultListener {
 
 	/**
-	 * Callback method da parte di un dialogFragment
-	 * @param tag - Tag di chiamata
-	 * @param payload - ObjectModel del dialogFragment
+	 * Callback method return by a dialogFragment
 	 * 
-	 * Nota: Se la finestra di dialogo viene cancellata (cancel / back) il metodo non viene invocato
+	 * @param tag - Tag used by caller
+	 * @param payload - ObjectModel of dialogFragment
+	 * 
+	 * Note: If the dialog will is dismessed (the user press cancel or back) 
+	 * this method will be not invoked.
 	 */
 	public void onDialogDone(String tag, Bundle payload);
 
