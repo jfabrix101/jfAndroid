@@ -28,13 +28,10 @@ import android.view.View;
 import android.widget.EditText;
 
 /**
- * Finestra di dialogo per con una view personalizzata
+ * Dialog window to create a dialog with a custom view.
  *
- * Il risultato dell'inserimento viene restituito all'interno del bundle di risposta
- * sotto la voce 'DIALOG_RESULT_VALUE'
- * 
- * @author jfabrix101
- *
+ * After pressed the OK button, the result will be returned 
+ * inside a bundle under the key 'DIALOG_RESULT_VALUE'
  */
 public class CustomViewDialogFragment extends DialogFragment 
 implements DialogInterface.OnClickListener {
