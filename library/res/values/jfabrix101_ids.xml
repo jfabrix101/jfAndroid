@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+	Custom ID utilizzati dalla libreria
+	Utilizzare questi id con la notazione id="@id/jfabrix101_xxxx"
+	(notare l'assenza del segno +)
+
+ -->
+<resources>
+    
+    <!-- id per i fragment utilizzati da AbstractFragmentActivityController -->
+    <item type="id" name="jfabrix101_leftFragment" />
+    <item type="id" name="jfabrix101_contentFragment" />
+    
+    <!-- Riservato per usi futuri -->
+    <item type="id" name="jfabrix101_rightFragment" />
+    
+</resources>
