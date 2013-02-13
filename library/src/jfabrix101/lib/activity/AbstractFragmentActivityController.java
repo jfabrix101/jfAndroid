@@ -29,9 +29,9 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,7 +50,7 @@ import android.widget.LinearLayout;
  *
  * 
  */
-public abstract class AbstractFragmentActivityController<A> extends FragmentActivity 
+public abstract class AbstractFragmentActivityController<A> extends Activity 
 implements ActionBar.OnNavigationListener {
 
 	// ObjectModel for this activity
@@ -362,7 +362,6 @@ implements ActionBar.OnNavigationListener {
 	public void onStart() {
 		super.onStart();
 		mLogger.trace("onStart() - MasterDetailActivity");
-		initActionBar();
 	}
 	
 	
@@ -383,7 +382,7 @@ implements ActionBar.OnNavigationListener {
 		refLeftFragment = leftFragment;
 		refRightFragment = rightFragments;
 		
-		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+		FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 		
 		if (refLeftFragment != null)  {
 			fragmentTransaction.replace(getLeftFragmentId(), (Fragment)refLeftFragment);
@@ -427,6 +426,10 @@ implements ActionBar.OnNavigationListener {
 	public A getObjectModel() { return objectModel; }
 	public void setObjectModel(A item) { objectModel = item; } 
 	
+	/**
+	 * Return the current visualizationMode
+	 */
+	public VisualizationMode getVisualizationMode() { return mVisualizationMode; }
 	
 	
 	@Override
@@ -460,81 +463,81 @@ implements ActionBar.OnNavigationListener {
     }
 	
 	
-	/**
-	 * Gestione dell'action BAR.
-	 * 
-	 * @return Restituisce la lista di oggetti da usare per l'actionBar. 
-	 * Come label per l'action bar viene utilizzato il metodo <code>toString()</code> dell'oggetto
-	 */
-	public abstract List<Object> getActionBarLabel();
-
-	public void initActionBar() {
-		
-		actionBarItemList = getActionBarLabel();
-		if (actionBarItemList == null || actionBarItemList.size() == 0) return;
-				
-		final ActionBar actionBar = getActionBar();
-		actionBar.setDisplayShowTitleEnabled(false);
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-		
-		// Set up the dropdown list navigation in the action bar.
-		actionBar.setListNavigationCallbacks(
-				new ArrayAdapter<Object>(getActionBarThemedContextCompat(),
-						android.R.layout.simple_list_item_1,
-						android.R.id.text1, actionBarItemList), this);
-	}
+//	/**
+//	 * Gestione dell'action BAR.
+//	 * 
+//	 * @return Restituisce la lista di oggetti da usare per l'actionBar. 
+//	 * Come label per l'action bar viene utilizzato il metodo <code>toString()</code> dell'oggetto
+//	 */
+//	public abstract List<Object> getActionBarLabel();
+//
+//	public void initActionBar() {
+//		
+//		actionBarItemList = getActionBarLabel();
+//		if (actionBarItemList == null || actionBarItemList.size() == 0) return;
+//				
+//		final ActionBar actionBar = getActionBar();
+//		actionBar.setDisplayShowTitleEnabled(false);
+//		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+//		
+//		// Set up the dropdown list navigation in the action bar.
+//		actionBar.setListNavigationCallbacks(
+//				new ArrayAdapter<Object>(getActionBarThemedContextCompat(),
+//						android.R.layout.simple_list_item_1,
+//						android.R.id.text1, actionBarItemList), this);
+//	}
+//	
+//	
+//	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+//	private Context getActionBarThemedContextCompat() {
+//		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+//			return getActionBar().getThemedContext();
+//		} else {
+//			return this;
+//		}
+//	}
+//	
+//	/**
+//	 * Callback method to change the objectModel on selecting an item on actionBar
+//	 * @param actionBarLabel
+//	 * @return
+//	 */
+//	public abstract A onActionBarItemSelected(Object actionBarItem);
+//	
+//	/*
+//	 * Manage the selection of items on actionBar
+//	 */
+//	@Override
+//	public boolean onNavigationItemSelected(int position, long id) {
+//		mLogger.trace("onNavigationItemSelected() - Position=%d. id=%d", position, id);
+//		if (actionBarItemList == null) return false;
+//		if (mActionBarSelectedPosition == position) {
+//			mLogger.trace(" +-- Object already selected. Operation ignored");
+//			return false;
+//		}
+//		
+//		Object selectedItem = actionBarItemList.get(position);
+//		A newObjectModel = onActionBarItemSelected(selectedItem);
+//		if (newObjectModel == null) {
+//			mLogger.trace(" +-- Invalid selected item (null) - Operation ignored");
+//			return false;
+//		}
+//		if (newObjectModel.equals(objectModel)) {
+//			mLogger.trace(" +-- Same item selected. Operatiokn ignored");
+//			return false;
+//		}
+//		
+//		// Change the objectModel and update fragments
+//		setObjectModel(newObjectModel);
+//		if (mVisualizationMode == VisualizationMode.LANDSCAPE) replaceFragments(createLeftFragmentInstance(), createRightFragmentInstance());
+//		else {
+//			if (refLeftFragment != null) replaceFragments(createLeftFragmentInstance(), null);
+//			else replaceFragments(null, createRightFragmentInstance());
+//		}
+//		return true;
+//	}
 	
 	
-	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-	private Context getActionBarThemedContextCompat() {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-			return getActionBar().getThemedContext();
-		} else {
-			return this;
-		}
-	}
-	
-	/**
-	 * Callback method to change the objectModel on selecting an item on actionBar
-	 * @param actionBarLabel
-	 * @return
-	 */
-	public abstract A onActionBarItemSelected(Object actionBarItem);
-	
-	/*
-	 * Manage the selection of items on actionBar
-	 */
-	@Override
-	public boolean onNavigationItemSelected(int position, long id) {
-		mLogger.trace("onNavigationItemSelected() - Position=%d. id=%d", position, id);
-		if (actionBarItemList == null) return false;
-		if (mActionBarSelectedPosition == position) {
-			mLogger.trace(" +-- Object already selected. Operation ignored");
-			return false;
-		}
-		
-		Object selectedItem = actionBarItemList.get(position);
-		A newObjectModel = onActionBarItemSelected(selectedItem);
-		if (newObjectModel == null) {
-			mLogger.trace(" +-- Invalid selected item (null) - Operation ignored");
-			return false;
-		}
-		if (newObjectModel.equals(objectModel)) {
-			mLogger.trace(" +-- Same item selected. Operatiokn ignored");
-			return false;
-		}
-		
-		// Change the objectModel and update fragments
-		setObjectModel(newObjectModel);
-		if (mVisualizationMode == VisualizationMode.LANDSCAPE) replaceFragments(createLeftFragmentInstance(), createRightFragmentInstance());
-		else {
-			if (refLeftFragment != null) replaceFragments(createLeftFragmentInstance(), null);
-			else replaceFragments(null, createRightFragmentInstance());
-		}
-		return true;
-	}
-	
-	public VisualizationMode getVisualizationMode() { return mVisualizationMode; }
 	
 	
 	// -------------------------------------------------------

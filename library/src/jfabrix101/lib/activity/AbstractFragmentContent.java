@@ -40,7 +40,7 @@ import android.widget.TextView;
  */
 @SuppressWarnings("rawtypes")
 public abstract class AbstractFragmentContent<A, X> 
-extends android.support.v4.app.Fragment  {
+extends android.app.Fragment  {
 
 	protected AbstractFragmentActivityController<A> mActivityController = null;
 	

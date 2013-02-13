@@ -401,11 +401,10 @@ public class DiskHelper {
     		@Override
     		public void dispatchMessage(Message msg) {
     			int code = msg.getData().getInt("code", -1);
-    			String message = msg.getData().getString("value", "");
-    		
+    			String message = msg.getData().getString("value");
+    			if (message == null) message = "";
     			if (code == 540) {
-    				ActivityHelper.showDialogBox(context, "Info", message,
-    						icon);
+    				ActivityHelper.showDialogBox(context, "Info", message, icon);
     			}
     			if (code == 550) { 
     				try {

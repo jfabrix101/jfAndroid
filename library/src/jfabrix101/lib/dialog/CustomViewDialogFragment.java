@@ -21,11 +21,10 @@ package jfabrix101.lib.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.app.DialogFragment;
 import android.view.View;
-import android.widget.EditText;
 
 /**
  * Dialog window to create a dialog with a custom view.

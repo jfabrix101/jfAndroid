@@ -2,7 +2,13 @@
  ==  NOTICE file for use with the Apache License, Version 2.0,     ==
  ====================================================================
 
- This product includes software developed by Alhneiti
-   (https://github.com/alhneiti/Android-QuickAction).
+ This product includes software developed by :
+ 
+ 
+  Alhneiti - AndroidQuickActions
+   (https://github.com/alhneiti/Android-QuickAction)
+   
+  Jeremy Feinstein - SlideMenu
+   (https://github.com/jfeinstein10/SlidingMenu)  
 
    

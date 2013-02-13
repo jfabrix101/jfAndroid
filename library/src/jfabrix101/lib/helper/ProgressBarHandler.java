@@ -42,7 +42,7 @@ public class ProgressBarHandler {
 		public void handleMessage(Message msg) {
 			if (pDialog == null) return;
 			int code = msg.getData().getInt("code", -1);
-			String message = msg.getData().getString("message", null);
+			String message = msg.getData().getString("message");
 			int value = msg.getData().getInt("value", -1);
 			switch (code) {
 				case PDIALOG_DISMISS: {

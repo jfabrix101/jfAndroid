@@ -22,6 +22,7 @@ package jfabrix101.lib.helper;
 import java.util.List;
 
 import jfabrix101.lib.dialog.DialogResultListener;
+import jfabrix101.lib.dialog.MessagePromptDialogFragment;
 import jfabrix101.lib.util.CallbackHandler;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -275,7 +276,7 @@ public class ActivityHelper {
     }
     
     /**
-     * Restituisce il nome dell'appicazione
+     * Return the name of application
      * @param context
      * @return
      */
@@ -285,11 +286,15 @@ public class ActivityHelper {
     }
     
     /**
-     * Mostra una finestra di dialogo con il changelog dell'applicazione
+     * Show a dialog windows with the changelogs
+     * The changelog file must be under the <i>raw</i> subfolder of resources.
+     * The file name must be <i>changelog</i>. Using the raw folder you can crete
+     * localized version of yuour file.
+     * 
      * @param context- context
-     * @param chengeLogTitle - titolo della finestra di dialogo
-     * @param forceShow : True = viene visualizzata sempre, false=viene visualizzata solo se la prima volta
-     * @param onOKHandler: Task da eseguire alla pressine de tasto Ok (default = null)
+     * @param chengeLogTitle - title of dialog
+     * @param forceShow : True = The dialog will be always shown, false=the dialog will be shown only the first time
+     * @param onOKHandler: Task to do when the user press OK (default = null)
      * @return
      */
     public static boolean showChangelogDialog(final Context context,
@@ -326,7 +331,7 @@ public class ActivityHelper {
     
     
     /**
-     * Verifica se l'applicazione sta girando all'interno di un emulatore
+     * Test if the app is running under inside an emulator
      * @return true se sta girando all'interno dell'emulatore
      */
     public static boolean isAndroidEmulator() {
@@ -334,9 +339,9 @@ public class ActivityHelper {
     }
     
     /**
-     * Verifica se un servizio sta girando
+     * Check if a service is running
      * @param context
-     * @param serviceClassName - Nome completo del servizio
+     * @param serviceClassName - complete name of service
      * @return
      */
     public static boolean isServiceRunning(Context context, String serviceClassName) {
