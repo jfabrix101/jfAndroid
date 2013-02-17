@@ -18,25 +18,19 @@
 */
 package jfabrix101.lib.activity;
 
-import java.util.List;
-
 import jfabrix101.lib.helper.ActivityHelper;
 import jfabrix101.lib.util.Logger;
-import android.R;
-import android.annotation.TargetApi;
-import android.app.ActionBar;
-import android.content.Context;
-import android.content.res.Configuration;
-import android.os.Build;
-import android.os.Bundle;
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.content.res.Configuration;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
@@ -50,8 +44,7 @@ import android.widget.LinearLayout;
  *
  * 
  */
-public abstract class AbstractFragmentActivityController<A> extends Activity 
-implements ActionBar.OnNavigationListener {
+public abstract class AbstractFragmentActivityController<A> extends FragmentActivity {
 
 	// ObjectModel for this activity
 	private A objectModel = null;
@@ -156,19 +149,6 @@ implements ActionBar.OnNavigationListener {
 	protected float getRightFragmentWeigth() { return 6.5f; }
 	
 	
-	//  --- BEGIN ActionBar
-
-	// Key to store the actual position of selected item
-	private static final String STATE_SELECTED_NAVIGATION_ITEM = "action_bar_selected_navigation_item";
-	
-	// List of labels for actionBar (can be null)
-	private List<Object> actionBarItemList = null;
-	
-	// Actual position of selected item on actionBar
-	private int mActionBarSelectedPosition = 0;
-			
-	//  --- END ActionBar
-	
 	
 	/**
 	 * Check if the portrait mode is supported.
@@ -182,7 +162,7 @@ implements ActionBar.OnNavigationListener {
 	protected boolean isPortraitFragmentModeSupported() {
 		int screenLayout = ActivityHelper.getScreenLayoutType(this); 
 		mLogger.trace("ScreenLayoutConfiguration : ", screenLayout);
-		if (screenLayout >= Configuration.SCREENLAYOUT_SIZE_XLARGE) return true; 
+		if (screenLayout > Configuration.SCREENLAYOUT_SIZE_LARGE) return true; 
 		else return false; 
 	}
 	
@@ -273,7 +253,7 @@ implements ActionBar.OnNavigationListener {
 				leftFragment.setVisibility(View.GONE);
 			}
 			mVisualizationMode = VisualizationMode.PORTRAIT_ONLY_RIGHT;
-			getActionBar().setDisplayHomeAsUpEnabled(true); 
+//			getActionBar().setDisplayHomeAsUpEnabled(true); 
 			return v;
 		} else {
 			LinearLayout layout = new LinearLayout(this);
@@ -289,7 +269,7 @@ implements ActionBar.OnNavigationListener {
 			
 			layout.addView(rightFrame);
 			mVisualizationMode = VisualizationMode.PORTRAIT_ONLY_RIGHT;
-			getActionBar().setDisplayHomeAsUpEnabled(true); 
+//			getActionBar().setDisplayHomeAsUpEnabled(true); 
 			return layout;
 		}
 	}
@@ -317,11 +297,6 @@ implements ActionBar.OnNavigationListener {
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		if (outState == null) return;
-
-		// Serialize the current dropdown position.
-		outState.putInt(STATE_SELECTED_NAVIGATION_ITEM, mActionBarSelectedPosition);
-		mLogger.trace("onSaveInstanceState() - Saving params . %s", outState);
-		
 	}
 	
 	
@@ -329,10 +304,6 @@ implements ActionBar.OnNavigationListener {
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
 		mLogger.trace("onRestoreInstanceState() - restoring Bundle: %s", savedInstanceState);
-		if (savedInstanceState.containsKey(STATE_SELECTED_NAVIGATION_ITEM)) {
-			mActionBarSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_NAVIGATION_ITEM);
-			if (actionBarItemList != null) getActionBar().setSelectedNavigationItem(mActionBarSelectedPosition);
-		}
 	}
 	
 
@@ -419,7 +390,8 @@ implements ActionBar.OnNavigationListener {
 		refLeftFragment = leftFragment;
 		refRightFragment = rightFragments;
 		
-		FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+		FragmentManager fm = getSupportFragmentManager();
+		FragmentTransaction fragmentTransaction = fm.beginTransaction();
 		
 		if (refLeftFragment != null)  {
 			fragmentTransaction.replace(getLeftFragmentId(), (Fragment)refLeftFragment);
@@ -456,7 +428,6 @@ implements ActionBar.OnNavigationListener {
 			((Fragment)refRightFragment).onResume();
 		}
 		mLogger.trace("resumeFragments() - Invalidating option menu!");
-		invalidateOptionsMenu();
 	}
 	
 		
@@ -474,106 +445,15 @@ implements ActionBar.OnNavigationListener {
 		mLogger.trace("onPause()");
 		super.onPause();
 	}
-	
-	
 
-	/*
-	 * Intercetta la pressione del tasto "Home" dell'actionBar per tornare
-	 * alla visualizzazione della lista ma solo  se si è in  modalità 
-	 * portrait e si sta visualizzando il dettaglio. 
-	 */
+	public static final int COMMAND_HOME = 1500;
 	@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-            	// Nel caso di visualizzazione in portrait e si sia nella visualizzazione 
-            	// dettaglio, si torna alla visualizzazione della lista
-            	if (mVisualizationMode == VisualizationMode.PORTRAIT_ONLY_RIGHT) {
-            		getActionBar().setDisplayHomeAsUpEnabled(false); 
-            		boolean processedEvent = onFragmentCommandEvent(refRightFragment, android.R.id.home, getObjectModel());
-            		if (!processedEvent) mLogger.warn("Ignored message home event (%d) ", android.R.id.home);
-            	}
-                return true;
-                
-        }
-        return super.onOptionsItemSelected(item);
-    }
-	
-	
-//	/**
-//	 * Gestione dell'action BAR.
-//	 * 
-//	 * @return Restituisce la lista di oggetti da usare per l'actionBar. 
-//	 * Come label per l'action bar viene utilizzato il metodo <code>toString()</code> dell'oggetto
-//	 */
-//	public abstract List<Object> getActionBarLabel();
-//
-//	public void initActionBar() {
-//		
-//		actionBarItemList = getActionBarLabel();
-//		if (actionBarItemList == null || actionBarItemList.size() == 0) return;
-//				
-//		final ActionBar actionBar = getActionBar();
-//		actionBar.setDisplayShowTitleEnabled(false);
-//		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-//		
-//		// Set up the dropdown list navigation in the action bar.
-//		actionBar.setListNavigationCallbacks(
-//				new ArrayAdapter<Object>(getActionBarThemedContextCompat(),
-//						android.R.layout.simple_list_item_1,
-//						android.R.id.text1, actionBarItemList), this);
-//	}
-//	
-//	
-//	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-//	private Context getActionBarThemedContextCompat() {
-//		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-//			return getActionBar().getThemedContext();
-//		} else {
-//			return this;
-//		}
-//	}
-//	
-//	/**
-//	 * Callback method to change the objectModel on selecting an item on actionBar
-//	 * @param actionBarLabel
-//	 * @return
-//	 */
-//	public abstract A onActionBarItemSelected(Object actionBarItem);
-//	
-//	/*
-//	 * Manage the selection of items on actionBar
-//	 */
-//	@Override
-//	public boolean onNavigationItemSelected(int position, long id) {
-//		mLogger.trace("onNavigationItemSelected() - Position=%d. id=%d", position, id);
-//		if (actionBarItemList == null) return false;
-//		if (mActionBarSelectedPosition == position) {
-//			mLogger.trace(" +-- Object already selected. Operation ignored");
-//			return false;
-//		}
-//		
-//		Object selectedItem = actionBarItemList.get(position);
-//		A newObjectModel = onActionBarItemSelected(selectedItem);
-//		if (newObjectModel == null) {
-//			mLogger.trace(" +-- Invalid selected item (null) - Operation ignored");
-//			return false;
-//		}
-//		if (newObjectModel.equals(objectModel)) {
-//			mLogger.trace(" +-- Same item selected. Operatiokn ignored");
-//			return false;
-//		}
-//		
-//		// Change the objectModel and update fragments
-//		setObjectModel(newObjectModel);
-//		if (mVisualizationMode == VisualizationMode.LANDSCAPE) replaceFragments(createLeftFragmentInstance(), createRightFragmentInstance());
-//		else {
-//			if (refLeftFragment != null) replaceFragments(createLeftFragmentInstance(), null);
-//			else replaceFragments(null, createRightFragmentInstance());
-//		}
-//		return true;
-//	}
-	
+	public void onBackPressed() {
+		if (mVisualizationMode == VisualizationMode.PORTRAIT_ONLY_RIGHT) {
+    		boolean processedEvent = onFragmentCommandEvent(refRightFragment, COMMAND_HOME, getObjectModel());
+    		if (!processedEvent) mLogger.warn("Ignored message home event (%d) ", COMMAND_HOME);
+    	}
+	}
 	
 	
 	

@@ -20,7 +20,6 @@ package jfabrix101.lib.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.EditText;
@@ -36,7 +35,7 @@ import android.widget.EditText;
  * PARAM_INPUT_TYPE : Input type to be associated with the keyboard (see android.text.InputType)
  * 
 s */
-public class MessagePromptDialogFragment extends DialogFragment 
+public class MessagePromptDialogFragment extends android.support.v4.app.DialogFragment 
 implements DialogInterface.OnClickListener {
 	
 	EditText editText = null;
@@ -65,7 +64,7 @@ implements DialogInterface.OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setCancelable(true);
-		int style = DialogFragment.STYLE_NORMAL, theme = 0;
+		int style = android.support.v4.app.DialogFragment.STYLE_NORMAL, theme = 0;
 		setStyle(style, theme);
 	}
 

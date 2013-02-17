@@ -21,6 +21,7 @@ package jfabrix101.lib.activity;
 import jfabrix101.lib.util.Logger;
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +41,7 @@ import android.widget.TextView;
  */
 @SuppressWarnings("rawtypes")
 public abstract class AbstractFragmentContent<A, X> 
-extends android.app.Fragment  {
+extends Fragment  {
 
 	protected AbstractFragmentActivityController<A> mActivityController = null;
 	
