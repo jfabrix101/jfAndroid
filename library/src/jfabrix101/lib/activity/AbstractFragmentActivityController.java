@@ -186,6 +186,13 @@ implements ActionBar.OnNavigationListener {
 		else return false; 
 	}
 	
+	/**
+	 * Return the layoutId for activity.
+	 * @return If return an invalid value (<=0) will be create a default
+	 * view for activity
+	 */
+	public abstract int getLayoutResourceId();
+	
 	
 	/**
 	 * Crea un layout in landscape utilizzando due fragment di peso proporzionale
@@ -194,24 +201,31 @@ implements ActionBar.OnNavigationListener {
 	 */
 	@SuppressWarnings("all")
 	protected View makeLandscapeLayout(LayoutInflater inflater) {
-		LinearLayout layout = new LinearLayout(this);
-		layout.setPadding(10, 10, 10, 10);	
-		layout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-		layout.setOrientation(LinearLayout.HORIZONTAL);
+		if (getLayoutResourceId() > 0) {
+			View v = LayoutInflater.from(this).inflate(getLayoutResourceId(), null);
+			mVisualizationMode = VisualizationMode.LANDSCAPE;
+			return v;
+		} else {
+			LinearLayout layout = new LinearLayout(this);
+			layout.setPadding(10, 10, 10, 10);	
+			layout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+			layout.setOrientation(LinearLayout.HORIZONTAL);
+			
+			FrameLayout leftFrame = new FrameLayout(this);
+			leftFrame.setId(getLeftFragmentId());
+			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, LayoutParams.FILL_PARENT, getLeftFragmentWeigth());
+			leftFrame.setLayoutParams(lp);
+			
+			FrameLayout rightFrame = new FrameLayout(this);
+			rightFrame.setId(getRightFragmentId());
+			lp = new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, getRightFragmentWeigth());
+			rightFrame.setLayoutParams(lp);
+			
+			layout.addView(leftFrame); layout.addView(rightFrame);
+			mVisualizationMode = VisualizationMode.LANDSCAPE;
+			return layout;
+		}
 		
-		FrameLayout leftFrame = new FrameLayout(this);
-		leftFrame.setId(getLeftFragmentId());
-		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, LayoutParams.FILL_PARENT, getLeftFragmentWeigth());
-		leftFrame.setLayoutParams(lp);
-		
-		FrameLayout rightFrame = new FrameLayout(this);
-		rightFrame.setId(getRightFragmentId());
-		lp = new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, getRightFragmentWeigth());
-		rightFrame.setLayoutParams(lp);
-		
-		layout.addView(leftFrame); layout.addView(rightFrame);
-		mVisualizationMode = VisualizationMode.LANDSCAPE;
-		return layout;
 	}
 	
 	
@@ -220,19 +234,30 @@ implements ActionBar.OnNavigationListener {
 	 */
 	@SuppressWarnings("all")
 	protected View makeLeftPortraitLayout(LayoutInflater inflater) {
-		LinearLayout layout = new LinearLayout(this);
-		layout.setPadding(10, 10, 10, 10);
-		layout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-		layout.setOrientation(LinearLayout.VERTICAL);
+		if (getLayoutResourceId() > 0) {
+			View v = LayoutInflater.from(this).inflate(getLayoutResourceId(), null);
+			View rightFragment = v.findViewById(getRightFragmentId());
+			if (rightFragment != null) {
+				rightFragment.setVisibility(View.GONE);
+			}
+			mVisualizationMode = VisualizationMode.PORTRAIT_ONLY_LEFT;
+			return v;
+		} else {
+			LinearLayout layout = new LinearLayout(this);
 		
-		FrameLayout leftFrame = new FrameLayout(this);
-		leftFrame.setId(getLeftFragmentId());
-		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-		leftFrame.setLayoutParams(lp);
-		
-		layout.addView(leftFrame); 
-		mVisualizationMode = VisualizationMode.PORTRAIT_ONLY_LEFT;
-		return layout;
+			layout.setPadding(10, 10, 10, 10);
+			layout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+			layout.setOrientation(LinearLayout.VERTICAL);
+			
+			FrameLayout leftFrame = new FrameLayout(this);
+			leftFrame.setId(getLeftFragmentId());
+			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+			leftFrame.setLayoutParams(lp);
+			
+			layout.addView(leftFrame); 
+			mVisualizationMode = VisualizationMode.PORTRAIT_ONLY_LEFT;
+			return layout;
+		}
 	}
 	
 	
@@ -241,20 +266,32 @@ implements ActionBar.OnNavigationListener {
 	 */
 	@SuppressWarnings("all")
 	protected View makeRightPortraitLayout(LayoutInflater inflater) {
-		LinearLayout layout = new LinearLayout(this);
-		layout.setPadding(10, 10, 10, 10);	
-		layout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-		layout.setOrientation(LinearLayout.VERTICAL);
+		if (getLayoutResourceId() > 0) {
+			View v = LayoutInflater.from(this).inflate(getLayoutResourceId(), null);
+			View leftFragment = v.findViewById(getLeftFragmentId());
+			if (leftFragment != null) {
+				leftFragment.setVisibility(View.GONE);
+			}
+			mVisualizationMode = VisualizationMode.PORTRAIT_ONLY_RIGHT;
+			getActionBar().setDisplayHomeAsUpEnabled(true); 
+			return v;
+		} else {
+			LinearLayout layout = new LinearLayout(this);
 		
-		FrameLayout rightFrame = new FrameLayout(this);
-		rightFrame.setId(getRightFragmentId());
-		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-		rightFrame.setLayoutParams(lp);
-		
-		layout.addView(rightFrame);
-		mVisualizationMode = VisualizationMode.PORTRAIT_ONLY_RIGHT;
-		getActionBar().setDisplayHomeAsUpEnabled(true); 
-		return layout;
+			layout.setPadding(10, 10, 10, 10);	
+			layout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+			layout.setOrientation(LinearLayout.VERTICAL);
+			
+			FrameLayout rightFrame = new FrameLayout(this);
+			rightFrame.setId(getRightFragmentId());
+			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+			rightFrame.setLayoutParams(lp);
+			
+			layout.addView(rightFrame);
+			mVisualizationMode = VisualizationMode.PORTRAIT_ONLY_RIGHT;
+			getActionBar().setDisplayHomeAsUpEnabled(true); 
+			return layout;
+		}
 	}
 	
 	
