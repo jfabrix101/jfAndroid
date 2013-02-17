@@ -16,7 +16,7 @@
  * License version 2.1 along with this program.
  * If not, see <http://www.gnu.org/licenses/>.
 */
-package jfabrix101.lib.activity;
+package jfabrix101.lib.fragmentActivity;
 
 import jfabrix101.lib.util.Logger;
 import android.app.Activity;
