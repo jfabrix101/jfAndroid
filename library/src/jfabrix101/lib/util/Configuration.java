@@ -24,18 +24,16 @@ import android.content.Context;
 import android.util.Log;
 
 /**
- * Singleton per la gestione dei parametri di configurazione
- * di una applicazione
+ * Singleton used to manage the configuration
  * 
- * La properties di configurazione devono essere memorizzatati 
- * all'interno della cartella ASSETS e deve chiamarsi
- * "applicationConfig.prop"
+ * You must define a properties (called "applicationConfig.prop")
+ * in your ASSETS folder.
  */
 public class Configuration {
 
 	private static Configuration instance = null;
 	private static String CONFIG_FILE_NAME = "applicationConfig.prop";
-	private static String LOG_TAG = "greenCube-Configuration";
+	private static String LOG_TAG = "jfabrix101-Configuration";
 	
 	private Properties conf = null;
 	

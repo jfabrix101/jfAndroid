@@ -62,7 +62,7 @@ import android.os.Message;
  * Attraverso il metodo <code>setIcon</code> e' possibile indicare l'icona da utilizzare
  * al posto di quella di default
  * 
- * @author 	14/09/2010 - Fabrizio Russo - fabrizio.russo@greencube.it - www.greencube.it
+ * @author 	14/09/2010 - Fabrizio Russo - www.fabrizio-russo.it
  * 			25/05/2012 - Aggiornamento struttura
  *
  */
