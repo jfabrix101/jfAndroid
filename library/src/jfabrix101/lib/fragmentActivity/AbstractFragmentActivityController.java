@@ -182,7 +182,7 @@ public abstract class AbstractFragmentActivityController<A> extends FragmentActi
 	@SuppressWarnings("all")
 	protected View makeLandscapeLayout(LayoutInflater inflater) {
 		if (getLayoutResourceId() > 0) {
-			View v = LayoutInflater.from(this).inflate(getLayoutResourceId(), null);
+			View v = inflater.inflate(getLayoutResourceId(), null);
 			mVisualizationMode = VisualizationMode.LANDSCAPE;
 			return v;
 		} else {

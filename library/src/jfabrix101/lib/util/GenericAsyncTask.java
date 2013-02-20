@@ -77,8 +77,28 @@ public abstract class GenericAsyncTask extends AsyncTask<Void, String, Boolean> 
 	
 	private Map<String, Object> taskParameters = null;
 	
+	/**
+	 * Helper method to obtain the retrun code
+	 * @param m
+	 * @return
+	 */
+	public static int getResultCodeFromMessage(Message m) {
+		Bundle b = m.getData();
+		return b.getInt(RESULT_CODE, -1);
+	}
+	
+	/**
+	 * Heper method to obtai the return value in case of single string
+	 * @param m
+	 * @return
+	 */
+	public static String getResultValueFromMessage(Message m) {
+		Bundle b = m.getData();
+		return b.getString(RESULT_VALUE);
+	}
 	
 	public static String RESULT_CODE = "msgCode";
+	public static String RESULT_VALUE = "msgValue";
 	
 	public GenericAsyncTask(Context context, Handler handler) {
 		this.context = context;
