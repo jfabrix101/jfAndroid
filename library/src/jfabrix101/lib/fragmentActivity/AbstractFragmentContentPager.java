@@ -35,10 +35,17 @@ public abstract class AbstractFragmentContentPager<A, X> extends AbstractFragmen
 
 	private ViewPager internalViewPager;
     private InternalPagerAdapter internalPageAdapter;
+	private int initialPosition = 0;
 	
     protected List<X> mDataModel = null;
 	protected List<X> getDataModel() { return mDataModel; }
 	protected void setDataModel(List<X> model) { mDataModel = model; }
+	
+	public void setInitialPosition(int pos) {
+		if (mDataModel == null) return;
+		if (pos > mDataModel.size()) return;
+		initialPosition = pos;
+	}
 	
 	/*
 	 * Metodo responsabile della restituzione della view dell'iesimo elemnto della lista
@@ -98,6 +105,7 @@ public abstract class AbstractFragmentContentPager<A, X> extends AbstractFragmen
         internalViewPager = new ViewPager(getActivity());
         internalViewPager.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         internalViewPager.setAdapter(internalPageAdapter);
+        internalViewPager.setCurrentItem(initialPosition);
 		
 	}
 		
