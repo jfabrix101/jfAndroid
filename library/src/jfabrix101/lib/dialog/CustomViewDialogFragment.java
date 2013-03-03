@@ -25,12 +25,36 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 /**
  * Dialog window to create a dialog with a custom view.
  *
- * After pressed the OK button, the result will be returned 
- * inside a bundle under the key 'DIALOG_RESULT_VALUE'
+ * <p>After pressed the OK button, the result will be returned 
+ * inside a bundle under the key 'DIALOG_RESULT_VALUE'.
+ * 
+ * <p>This dialog will show your custom view inside a dialog with two buttons. 
+ * The cancel button simply close the dialog, the OK button dismiss the dialog and
+ * call your callback method (<code>DialogResultListener.onDialogDone</code>).
+ * 
+ * <p>Example:
+ * 
+ * <p><pre>
+ 	final EditText editText = new EditText(context);
+		    
+	DialogResultListener callback = new DialogResultListener() {
+			
+		public void onDialogDone(String tag, Bundle payload) {
+			String text = editText.getText().toString();
+			Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+		}
+	};
+	   
+   CustomViewDialogFragment dlg = CustomViewDialogFragment.newInstance(
+	   	"Title", "Message", editText, callback);
+   dlg.show(getFragmentManager(), "");
+ * </pre>
  */
 public class CustomViewDialogFragment extends DialogFragment 
 implements DialogInterface.OnClickListener {

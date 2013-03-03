@@ -22,9 +22,35 @@ import jfabrix101.lib.helper.InstallationHelper;
 import jfabrix101.lib.util.Configuration;
 import jfabrix101.lib.util.Logger;
 
-/*
+/**
  * Helper class for application.
- * Include this class in your manifest.xml
+ * This class create some basic infrastructure for you application:
+ * 
+ * <ol>
+ * <li> Load a <i>configuration file</i> (applicationConfig.prop) if 
+ * exists from your assets forlder and itialialize a singleton properties
+ * (See Configuration for more details)</li>
+ * <li> Create (or relaod) an installation id. The installation Id is unique for
+ * this application installed on a device (divverent devise will have different 
+ * installationId. </li>
+ * 
+ * </ol>
+ * <p>Usage: Extends or iclude this class in your manifest.xml
+ * Example:
+ * <pre><code>
+ * &lt;application
+        android:name=".Application"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" &gt;
+        
+   </code></pre>
+   
+   where "Application" is a class in your project that extands this class or this class
+   if you don't needs of customizations.
+   
+   @see Configuration  
  */
 public class Application extends android.app.Application {
 

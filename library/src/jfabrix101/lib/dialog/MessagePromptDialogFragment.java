@@ -27,14 +27,15 @@ import android.widget.EditText;
 /**
  * Dialog window to insert an input text.
  *
- * As result, the text inserted by user will be returned inside a bundle
+ * <p>As result, the text inserted by user will be returned inside a bundle
  * under the key 'DIALOG_RESULT_VALUE'
  * 
- * Optional input paramters:
- * PARAM_HINT : Tooltip to be used inside a textfield
- * PARAM_INPUT_TYPE : Input type to be associated with the keyboard (see android.text.InputType)
- * 
-s */
+ * <p>Optional input paramters:
+ * <ul>
+ * <li>PARAM_HINT : Tooltip to be used inside a textfield</li>
+ * <li>PARAM_INPUT_TYPE : Input type to be associated with the keyboard (see android.text.InputType)</li>
+ * </ul>
+ */
 public class MessagePromptDialogFragment extends android.support.v4.app.DialogFragment 
 implements DialogInterface.OnClickListener {
 	
@@ -97,4 +98,6 @@ implements DialogInterface.OnClickListener {
 		b.putString(DIALOG_RESULT_VALUE, editText.getText().toString());
 		resultListener.onDialogDone(getTag(), b);
 	}
+	
+	
 }

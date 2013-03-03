@@ -330,6 +330,26 @@ public class ActivityHelper {
     }
     
     
+    
+    public static void showAboutDialog(final Context context,
+    		String aboutTitle, String assetFileName) {
+    	if (assetFileName == null) assetFileName = "about";
+    	LinearLayout dialogView = new LinearLayout(context);
+    	dialogView.setOrientation(LinearLayout.VERTICAL);
+    	String data = DiskHelper.loadRawTextFile(context, assetFileName);
+        WebView webView = new WebView(context);
+        webView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+        webView.loadData(data, "text/html", "UTF-8");
+        dialogView.addView(webView);
+        
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setCancelable(true);
+        builder.setTitle(aboutTitle);
+        builder.setView(dialogView);
+        builder.setNeutralButton(android.R.string.ok, null);
+        builder.create().show();
+    }
+    
     /**
      * Test if the app is running under inside an emulator
      * @return true se sta girando all'interno dell'emulatore

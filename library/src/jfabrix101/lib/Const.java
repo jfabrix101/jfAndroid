@@ -18,6 +18,11 @@
 */
 package jfabrix101.lib;
 
+/**
+ * 
+ * Interface with general constants.
+ *
+ */
 public interface Const {
 
 	public int API_VERSION = 1;
